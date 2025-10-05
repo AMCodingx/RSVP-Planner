@@ -1,7 +1,7 @@
-import { Handler, schedule } from '@netlify/functions';
+import { schedule } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
 
-const handler: Handler = async () => {
+export const handler = schedule('0 0 * * 0', async () => {
   try {
     const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
     const supabaseKey = process.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY || process.env.SUPABASE_KEY;
@@ -43,7 +43,4 @@ const handler: Handler = async () => {
       })
     };
   }
-};
-
-export { handler };
-export const config = schedule('0 0 * * 0');
+});
