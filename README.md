@@ -2,7 +2,6 @@
 
 > A modern, comprehensive wedding guest management system with automated RSVP tracking through QR codes
 
-[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://madera-wedding-rsvp.netlify.app)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.x-61dafb)](https://reactjs.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-Backend-green)](https://supabase.com/)
