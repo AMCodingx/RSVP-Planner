@@ -1,46 +1,85 @@
-import { schedule } from '@netlify/functions';
-import { createClient } from '@supabase/supabase-js';
+import type { Config } from "@netlify/functions";
+import { createClient } from "@supabase/supabase-js";
 
-export const handler = schedule('0 0 * * 0', async () => {
+export default async (req: Request) => {
   try {
+    const { next_run } = await req.json();
+    console.log("Keep-alive function executed! Next invocation at:", next_run);
+
     const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-    const supabaseKey = process.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY || process.env.SUPABASE_KEY;
-    
+    const supabaseKey =
+      process.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY || process.env.SUPABASE_KEY;
+
     if (!supabaseUrl || !supabaseKey) {
-      throw new Error('Supabase credentials are missing');
+      console.error("Supabase credentials are missing");
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Supabase credentials are missing",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
-    
-    await supabase.from('couples').select('count').limit(1).single();
-    
-    const otherProjects = process.env.OTHER_PROJECT_URLS?.split(',') || [];
-    
+
+    const { data, error } = await supabase
+      .from("couples")
+      .select("count")
+      .limit(1)
+      .single();
+
+    if (error) {
+      console.error("Supabase query error:", error);
+    } else {
+      console.log("Supabase connection successful:", data);
+    }
+
+    const otherProjects = process.env.OTHER_PROJECT_URLS?.split(",") || [];
+
     const fetchPromises = otherProjects
-      .filter(url => url.trim())
-      .map(url => 
+      .filter((url) => url.trim())
+      .map((url) =>
         fetch(url.trim())
-          .then(() => ({ url, status: 'success' }))
-          .catch(() => ({ url, status: 'failed' }))
+          .then(() => ({ url, status: "success" }))
+          .catch((err) => ({ url, status: "failed", error: err.message }))
       );
-    
+
     const otherProjectsResults = await Promise.all(fetchPromises);
-    
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
+
+    console.log("Other projects pinged:", otherProjectsResults);
+
+    return new Response(
+      JSON.stringify({
         success: true,
         timestamp: new Date().toISOString(),
-        otherProjects: otherProjectsResults
-      })
-    };
+        next_run,
+        supabase: error ? "failed" : "success",
+        otherProjects: otherProjectsResults,
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
+    console.error("Keep-alive function error:", error);
+    return new Response(
+      JSON.stringify({
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      })
-    };
+        error: error instanceof Error ? error.message : "Unknown error",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
-});
+};
+
+export const config: Config = {
+  schedule: "0 0 * * 0",
+};
