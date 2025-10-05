@@ -10,13 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@rollup/rollup-win32-x64-msvc": "^4.52.4",
     "@supabase/supabase-js": "^2.57.4",
     "@types/qrcode": "^1.5.5",
     "@types/react-router-dom": "^5.3.3",
     "@types/xlsx": "^0.0.35",
     "lightningcss": "^1.30.2",
-    "lightningcss-win32-x64-msvc": "^1.30.2",
     "lucide-react": "^0.544.0",
     "qrcode": "^1.5.4",
     "react": "^19.1.1",
