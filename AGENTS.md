@@ -10,6 +10,7 @@ Wedding RSVP Planning Application - A comprehensive guest management system for 
 - Automated RSVP status updates
 - Real-time guest status monitoring
 
+
 ## Tech Stack
 - **Frontend**: React with TypeScript
 - **UI Components**: shadcn/ui
