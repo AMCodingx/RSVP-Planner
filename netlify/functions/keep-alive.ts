@@ -3,8 +3,16 @@ import { createClient } from "@supabase/supabase-js";
 
 export default async (req: Request) => {
   try {
-    const { next_run } = await req.json();
-    console.log("Keep-alive function executed! Next invocation at:", next_run);
+    let next_run = null;
+    
+    try {
+      const body = await req.json();
+      next_run = body.next_run;
+    } catch {
+      console.log("No JSON body provided - likely a manual invocation");
+    }
+    
+    console.log("Keep-alive function executed!", next_run ? `Next invocation at: ${next_run}` : "Manual invocation");
 
     const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
     const supabaseKey =
