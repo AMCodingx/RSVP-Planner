@@ -24,7 +24,6 @@ interface StepInfo {
 interface GuestFormData {
   firstName: string
   lastName: string
-  email: string
   phone: string
   ageCategory: 'adult' | 'child'
   specialNotes: string
@@ -40,7 +39,6 @@ interface GroupAssignmentData {
 const initialGuestData: GuestFormData = {
   firstName: '',
   lastName: '',
-  email: '',
   phone: '',
   ageCategory: 'adult',
   specialNotes: ''
@@ -226,26 +224,26 @@ export function AddGuestWizard({ isOpen, onClose, onSuccess }: AddGuestWizardPro
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl w-full max-w-4xl max-h-[95vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm w-full max-w-4xl max-h-[95vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
             Add Guests
           </h2>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1"
           >
-            <X className="h-6 w-6" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {/* Progress Steps */}
-          <div className="mb-8">
-            <div className="flex items-center justify-center mb-4">
-              <div className="flex items-center flex-wrap gap-2 justify-center">
+          <div className="mb-6">
+            <div className="flex items-center justify-start overflow-x-auto pb-2">
+              <div className="flex items-center gap-2 min-w-max">
                 {generateSteps().map((step, index) => {
                   const stepNumber = index + 1
                   const isActive = 
@@ -271,21 +269,21 @@ export function AddGuestWizard({ isOpen, onClose, onSuccess }: AddGuestWizardPro
                         }}
                         disabled={step.stepType === 'confirm'}
                         className={`
-                          w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors
+                          w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium transition-all duration-300
                           ${isCompleted ? 'bg-green-500 text-white' : 
                             isActive ? 'bg-rose-500 text-white' : 
                             'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'}
                           ${step.stepType !== 'confirm' ? 'hover:opacity-80 cursor-pointer' : 'cursor-default'}
                         `}
                       >
-                        {isCompleted ? <Check className="h-4 w-4" /> : stepNumber}
+                        {isCompleted ? <Check className="h-3.5 w-3.5" /> : stepNumber}
                       </button>
-                      <span className="ml-2 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                      <span className="ml-2 text-xs sm:text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                         {step.label}
                       </span>
                       {index < generateSteps().length - 1 && (
                         <div className={`
-                          w-6 h-0.5 mx-2
+                          w-4 sm:w-6 h-0.5 mx-1 sm:mx-2
                           ${isCompleted ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'}
                         `} />
                       )}
@@ -298,7 +296,7 @@ export function AddGuestWizard({ isOpen, onClose, onSuccess }: AddGuestWizardPro
 
           {/* Error Display */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
               <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
             </div>
           )}
@@ -328,12 +326,12 @@ export function AddGuestWizard({ isOpen, onClose, onSuccess }: AddGuestWizardPro
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between p-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 sm:p-6 border-t border-gray-100 dark:border-gray-700">
           <button
             onClick={currentStep === 'guest-details' ? handleClose : () => {
               setCurrentStep('guest-details')
             }}
-            className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+            className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
           >
             <ArrowLeft className="h-4 w-4 inline mr-2" />
             {currentStep === 'guest-details' ? 'Cancel' : 'Back'}
@@ -346,7 +344,7 @@ export function AddGuestWizard({ isOpen, onClose, onSuccess }: AddGuestWizardPro
               }
             }}
             disabled={!canProceed() || isSubmitting}
-            className="px-6 py-2 bg-rose-500 hover:bg-rose-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 text-white font-medium rounded-md transition-colors disabled:cursor-not-allowed"
+            className="px-6 py-2 bg-rose-500 hover:bg-rose-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 text-white font-medium rounded-lg transition-all duration-300 disabled:cursor-not-allowed text-sm"
           >
             {isSubmitting ? (
               'Adding...'
@@ -386,17 +384,17 @@ function CurrentGuestForm({
   onNext?: () => void
 }) {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+          <h3 className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">
             Guest {guestNumber} Details
           </h3>
           <div className="flex items-center gap-2">
             {onPrevious && (
               <button
                 onClick={onPrevious}
-                className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md transition-colors"
+                className="px-3 py-1.5 text-xs sm:text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-all duration-300 font-medium"
               >
                 ← Previous
               </button>
@@ -404,7 +402,7 @@ function CurrentGuestForm({
             {onNext && (
               <button
                 onClick={onNext}
-                className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md transition-colors"
+                className="px-3 py-1.5 text-xs sm:text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-all duration-300 font-medium"
               >
                 Next →
               </button>
@@ -415,23 +413,23 @@ function CurrentGuestForm({
           {totalGuests > 1 && (
             <button
               onClick={onRemove}
-              className="px-3 py-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium rounded-md transition-colors"
+              className="px-3 py-2 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-xs sm:text-sm font-medium rounded-lg transition-colors hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-1"
             >
-              <X className="h-4 w-4 inline mr-1" />
-              Remove
+              <X className="h-4 w-4" />
+              <span className="hidden sm:inline">Remove</span>
             </button>
           )}
           <button
             onClick={onAdd}
-            className="px-3 py-2 bg-rose-500 hover:bg-rose-600 text-white text-sm font-medium rounded-md transition-colors flex items-center gap-2"
+            className="px-3 py-2 bg-rose-500 hover:bg-rose-600 text-white text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 flex items-center gap-1.5"
           >
             <Plus className="h-4 w-4" />
-            Add Guest
+            <span>Add Guest</span>
           </button>
         </div>
       </div>
 
-      <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+      <div className="border border-gray-100 dark:border-gray-700 rounded-lg p-4 sm:p-5">
         <SingleGuestForm
           guest={guest}
           onChange={onUpdate}
@@ -443,9 +441,7 @@ function CurrentGuestForm({
 function SingleGuestForm({ guest, onChange }: { guest: GuestFormData, onChange: (guest: GuestFormData) => void }) {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Guest Details</h3>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             First Name *
@@ -454,7 +450,7 @@ function SingleGuestForm({ guest, onChange }: { guest: GuestFormData, onChange: 
             type="text"
             value={guest.firstName}
             onChange={(e) => onChange({ ...guest, firstName: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all duration-300"
             placeholder="Enter first name"
           />
         </div>
@@ -467,26 +463,13 @@ function SingleGuestForm({ guest, onChange }: { guest: GuestFormData, onChange: 
             type="text"
             value={guest.lastName}
             onChange={(e) => onChange({ ...guest, lastName: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all duration-300"
             placeholder="Enter last name"
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            value={guest.email}
-            onChange={(e) => onChange({ ...guest, email: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-            placeholder="Enter email address"
-          />
-        </div>
-
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Phone
@@ -495,13 +478,11 @@ function SingleGuestForm({ guest, onChange }: { guest: GuestFormData, onChange: 
             type="tel"
             value={guest.phone}
             onChange={(e) => onChange({ ...guest, phone: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all duration-300"
             placeholder="Enter phone number"
           />
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Age Category
@@ -509,7 +490,7 @@ function SingleGuestForm({ guest, onChange }: { guest: GuestFormData, onChange: 
           <select
             value={guest.ageCategory}
             onChange={(e) => onChange({ ...guest, ageCategory: e.target.value as 'adult' | 'child' })}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all duration-300"
           >
             <option value="adult">Adult (18+)</option>
             <option value="child">Child (Under 18)</option>
@@ -525,7 +506,7 @@ function SingleGuestForm({ guest, onChange }: { guest: GuestFormData, onChange: 
           value={guest.specialNotes}
           onChange={(e) => onChange({ ...guest, specialNotes: e.target.value })}
           rows={3}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all duration-300 resize-none"
           placeholder="Any special notes about this guest..."
         />
       </div>
@@ -547,12 +528,12 @@ function GroupAssignmentForm({
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <h3 className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">
           Group Setup
         </h3>
-        <span className="text-sm text-gray-500 dark:text-gray-400">
+        <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
           Add to existing group or create new
         </span>
       </div>
@@ -566,15 +547,15 @@ function GroupAssignmentForm({
                 name="groupType"
                 checked={assignment.type === 'existing'}
                 onChange={() => onChange({ type: 'existing', existingGroupId: availableGroups[0]?.id })}
-                className="mr-3 text-rose-500 focus:ring-rose-500"
+                className="mr-2 text-rose-500 focus:ring-rose-500 w-4 h-4"
               />
-              <span className="text-gray-900 dark:text-white">Add to existing group</span>
+              <span className="text-sm text-gray-900 dark:text-white font-medium">Add to existing group</span>
             </label>
             {assignment.type === 'existing' && (
               <select
                 value={assignment.existingGroupId || ''}
                 onChange={(e) => onChange({ ...assignment, existingGroupId: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all duration-300"
               >
                 <option value="">Select a group</option>
                 {availableGroups.map(group => (
@@ -592,9 +573,9 @@ function GroupAssignmentForm({
               name="groupType"
               checked={assignment.type === 'new'}
               onChange={() => onChange({ type: 'new', newGroupName: '' })}
-              className="mr-3 text-rose-500 focus:ring-rose-500"
+              className="mr-2 text-rose-500 focus:ring-rose-500 w-4 h-4"
             />
-            <span className="text-gray-900 dark:text-white">
+            <span className="text-sm text-gray-900 dark:text-white font-medium">
               Create new group
             </span>
           </label>
@@ -605,9 +586,9 @@ function GroupAssignmentForm({
                 placeholder="Enter group name"
                 value={assignment.newGroupName || ''}
                 onChange={(e) => onChange({ ...assignment, newGroupName: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all duration-300"
               />
-              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+              <div className="border border-gray-100 dark:border-gray-700 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                   Invitation Address
                 </h4>
